@@ -13,6 +13,7 @@ import 'package:lakasir/models/printer.dart';
 import 'package:lakasir/screens/setting/printers/print_receipt.dart';
 import 'package:lakasir/utils/colors.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sunmi_printer_plus/core/sunmi/sunmi_printer.dart';
 import 'package:sunmi_printer_plus/sunmi_printer_plus.dart';
 
 String formatPrice(dynamic price, {bool isSymbol = true}) {
@@ -132,8 +133,8 @@ void printExampleReceipt(BlueThermalPrinter bluetooth, Printer printer) {
 
 void openSunmiCashDrawer() async {
   try {
-    await SunmiPrinter.bindingPrinter();
-    await SunmiPrinter.openDrawer();
+    // await SunmiPrinter.bindingPrinter();
+    // await SunmiPrinter.openDrawer();
     print('Sunmi cash drawer opened successfully');
   } catch (e) {
     print('Error opening Sunmi cash drawer: $e');

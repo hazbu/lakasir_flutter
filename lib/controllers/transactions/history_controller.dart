@@ -16,14 +16,20 @@ class HistoryController extends GetxController {
   ).obs;
   int perPage = 20;
 
-  Future<void> fetchTransaction(PaginationRequest request) async {
+  Future<List<TransactionHistoryResponse>> fetchTransaction(PaginationRequest request) async {
     isLoading.value = true;
     final response = await _historyService.get(request);
-    histories.value = response.data!;
+    final data = response.data ?? [];
+
+    // Opsional: kamu masih bisa menyimpan ke histories kalau mau
+    histories.value = data;
+
     isLoading.value = false;
+    return data;
   }
 
-  // @override
+
+// @override
   // void onInit() {
   //   fetchTransaction(PaginationRequest(page: 1, perPage: perPage));
   //   super.onInit();

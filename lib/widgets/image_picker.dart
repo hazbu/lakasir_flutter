@@ -89,18 +89,18 @@ class _MyImagePickerState extends State<MyImagePicker> {
         sourcePath: selected.path,
         maxWidth: widget.maxWidth,
         maxHeight: widget.maxHeight,
-        aspectRatioPresets: [
-          CropAspectRatioPreset.square,
-        ],
-        uiSettings: [
-          AndroidUiSettings(
-            toolbarTitle: 'Cropper',
-            toolbarColor: primary,
-            toolbarWidgetColor: Colors.white,
-            initAspectRatio: CropAspectRatioPreset.square,
-            lockAspectRatio: true,
-          ),
-        ],
+        // aspectRatioPresets: [
+        //   CropAspectRatioPreset.square,
+        // ],
+        // uiSettings: [
+        //   AndroidUiSettings(
+        //     toolbarTitle: 'Cropper',
+        //     toolbarColor: primary,
+        //     toolbarWidgetColor: Colors.white,
+        //     initAspectRatio: CropAspectRatioPreset.square,
+        //     lockAspectRatio: true,
+        //   ),
+        // ],
       );
       setState(() {
         _image = image_picker.XFile(croppedFile!.path);

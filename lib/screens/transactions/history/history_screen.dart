@@ -30,31 +30,23 @@ class _HistoryScreenState extends State<HistoryScreen> {
   final _secureInitialPriceController = Get.put(SecureInitialPriceController());
   final _settingController = Get.put(SettingController());
   final _authController = Get.put(AuthController());
-  final PagingController<int, TransactionHistoryResponse> _pagingController =
-      PagingController(firstPageKey: 0);
-
-  @override
-  void initState() {
-    _secureInitialPriceController.isOpened.value = false;
-    _pagingController.addPageRequestListener((pageKey) async {
-      await _historyController.fetchTransaction(
+  late final PagingController<int, TransactionHistoryResponse>
+      _pagingController = PagingController<int, TransactionHistoryResponse>(
+    getNextPageKey: (state) =>
+        state.lastPageIsEmpty ? null : state.nextIntPageKey,
+    fetchPage: (pageKey) async {
+      return await _historyController.fetchTransaction(
         PaginationRequest(
           page: pageKey + 1,
           perPage: _historyController.perPage,
         ),
       );
-      final isLastPage =
-          _historyController.histories.length < _historyController.perPage;
-      if (isLastPage) {
-        _pagingController.appendLastPage(_historyController.histories);
-      } else {
-        final nextPageKey = pageKey + 1;
-        _pagingController.appendPage(
-          _historyController.histories,
-          nextPageKey,
-        );
-      }
-    });
+    },
+  );
+
+  @override
+  void initState() {
+    _secureInitialPriceController.isOpened.value = false;
     super.initState();
   }
 
@@ -227,12 +219,16 @@ class _HistoryScreenState extends State<HistoryScreen> {
               ],
             ),
             Expanded(
-              child: PagedListView(
-                pagingController: _pagingController,
-                builderDelegate:
-                    PagedChildBuilderDelegate<TransactionHistoryResponse>(
-                  itemBuilder: (context, history, index) => CardList(
-                    history: history,
+              child: PagingListener<int, TransactionHistoryResponse>(
+                controller: _pagingController,
+                builder: (context, state, fetchNextPage) =>
+                    PagedListView<int, TransactionHistoryResponse>(
+                  state: state,
+                  fetchNextPage: fetchNextPage,
+                  builderDelegate:
+                      PagedChildBuilderDelegate<TransactionHistoryResponse>(
+                    itemBuilder: (context, history, index) =>
+                        CardList(history: history),
                   ),
                 ),
               ),
